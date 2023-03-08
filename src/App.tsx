@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "./reducers/todos";
+import { RootState } from "./reducers/index";
+import { fetchPosts } from "./actions/posts";
 
 type Props = {
   value: any;
@@ -9,12 +10,25 @@ type Props = {
   onDecrement: () => void;
 };
 
+interface Post {
+  userId: number;
+  id: number;
+  title: string;
+}
+
 function App({ value, onIncrement, onDecrement }: Props) {
-  const todos: string[] = useSelector((state: RootState) => state.todos);
-  const counter = useSelector((state: RootState) => state.counter);
   const dispatch = useDispatch();
+  const todos: string[] = useSelector((state: RootState) => state.todos);
+  const posts: Post[] = useSelector((state: RootState) => state.posts);
+  const counter = useSelector((state: RootState) => state.counter);
 
   const [todoValue, setTodoValue] = useState("");
+
+  useEffect(() => {
+    dispatch(fetchPosts())
+  }, [dispatch])
+
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTodoValue(e.target.value);
   };
@@ -38,6 +52,10 @@ function App({ value, onIncrement, onDecrement }: Props) {
         <input type="text" value={todoValue} onChange={handleChange} />
         <input type="submit" />
       </form>
+
+      <ul>
+        {posts.map((post, index) => <li key={index}>{post.title}</li>) }
+      </ul>
     </div>
   );
 }

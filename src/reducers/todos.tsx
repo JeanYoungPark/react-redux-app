@@ -1,5 +1,3 @@
-import rootReducer from ".";
-
 enum ActionType {
   ADD_TODO = "ADD_TODO",
   DELETE_TODO = "DELETE_TODO",
@@ -21,4 +19,4 @@ const todos = (state = [], action: Action) => {
 };
 
 export default todos;
-export type RootState = ReturnType<typeof rootReducer>;
+
